@@ -1,0 +1,13 @@
+.layout {
+	height: 100vh;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: right;
+}
+
+.content {
+	padding: 48px;
+}
