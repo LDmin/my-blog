@@ -8,6 +8,11 @@
 	justify-content: right;
 }
 
+.content-wrapper {
+	padding: 3rem;
+}
+
 .content {
-	padding: 48px;
+	padding: 2rem;
+	background-color: #ffffff;
 }

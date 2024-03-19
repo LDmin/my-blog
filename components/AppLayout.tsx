@@ -32,16 +32,18 @@ const AppLayout: React.FC<WithRouterProps & IPropsChildren> = ({
             items={[
               {
                 label: "前台页面",
-                key: "/front",
+                key: "/front/list",
               },
               {
                 label: "后台管理",
-                key: "/admin",
+                key: "/admin/list",
               },
             ]}
           />
         </Header>
-        <Content className={`${styles.content}`}>{children}</Content>
+        <Content className={`${styles["content-wrapper"]}`}>
+          <div className={`${styles["content"]}`}>{children}</div>
+        </Content>
       </Layout>
     </>
   );
