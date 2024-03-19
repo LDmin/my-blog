@@ -61,7 +61,7 @@ function ArticleDetail({ data }: { data: { article: ArticleProps } }) {
           </Typography.Text>
         </div>
         <Divider></Divider>
-        <ReactMarkdown children={data.article.content} />
+        <ReactMarkdown>{data.article.content}</ReactMarkdown>
       </div>
     </>
   );
