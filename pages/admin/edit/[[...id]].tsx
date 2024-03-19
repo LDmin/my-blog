@@ -3,7 +3,7 @@ import Form, { FormProps } from "antd/lib/form/Form";
 import FormItem from "antd/lib/form/FormItem";
 import Input from "antd/lib/input/Input";
 import TextArea from "antd/lib/input/TextArea";
-import styles from "@/styles/admin/Create.module.css";
+import styles from "@/styles/admin/Edit.module.css";
 import Button from "antd/lib/button";
 import Space from "antd/lib/space";
 import DatePicker from "antd/lib/date-picker";
@@ -11,6 +11,47 @@ import dayjs, { Dayjs } from "dayjs";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import Link from "next/link";
+// import Editor from "for-editor";
+import { useRef } from "react";
+import { GetServerSideProps } from "next";
+import client from "@/lib/apollo-client";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(() => import("for-editor") as any, {
+  ssr: false,
+});
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  let id = context.params?.id as string;
+
+  if (!id) {
+    return {
+      props: {},
+    };
+  }
+
+  const { data } = await client.query({
+    query: gql`
+      query QueryArticle($id: ID!) {
+        article(id: $id) {
+          id
+          title
+          content
+          createdAt
+        }
+      }
+    `,
+    variables: {
+      id: Number(id),
+    },
+  });
+
+  return {
+    props: {
+      data,
+    },
+  };
+};
 
 const CreateArticleMutation = gql`
   mutation CreateDraftMutation(
@@ -27,7 +68,8 @@ const CreateArticleMutation = gql`
   }
 `;
 
-function CreateArticle() {
+function CreateArticle({ data }: { data: { article: ArticleProps } }) {
+  const editor = useRef(null);
   const [createArticle] = useMutation(CreateArticleMutation);
   const router = useRouter();
 
@@ -41,7 +83,7 @@ function CreateArticle() {
     });
     router.push("/admin/list");
   };
-
+  console.log(data);
   return (
     <div className="layout-content">
       <Form
@@ -49,7 +91,13 @@ function CreateArticle() {
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 20 }}
         className={`${styles.form}`}
-        initialValues={{ createdAt: dayjs() }}
+        initialValues={{
+          title: data?.article.title || "",
+          content: data?.article.content || "",
+          createdAt: data?.article.createdAt
+            ? dayjs(Number(data.article.createdAt))
+            : dayjs(),
+        }}
         onFinish={onFinish}
       >
         <FormItem<ArticleProps>
@@ -64,7 +112,8 @@ function CreateArticle() {
           name="content"
           rules={[{ required: true, message: "请输入文章内容!" }]}
         >
-          <TextArea rows={10} />
+          {/* <TextArea rows={10} /> */}
+          <Editor />
         </FormItem>
         <FormItem<ArticleProps>
           label="发布时间"

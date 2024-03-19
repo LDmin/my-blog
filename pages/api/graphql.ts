@@ -29,6 +29,23 @@ builder.prismaObject("Article", {
   }),
 });
 
+builder.queryField("article", (t) =>
+  t.prismaField({
+    type: "Article",
+    args: {
+      id: t.arg.id({ required: true }),
+    },
+    nullable: true,
+    resolve: async (query, _parent, args) =>
+      prisma.article.findUnique({
+        ...query,
+        where: {
+          id: Number(args.id),
+        },
+      }),
+  })
+);
+
 builder.queryField("articles", (t) =>
   t.prismaField({
     type: ["Article"],
@@ -36,9 +53,14 @@ builder.queryField("articles", (t) =>
       take: t.arg.int({ required: true }),
       skip: t.arg.int({ required: true }),
     },
-    resolve: async (query) =>
+    resolve: async (query, _parent, args) =>
       prisma.article.findMany({
-        // ...query,
+        ...query,
+        take: args.take,
+        skip: args.skip,
+        orderBy: {
+          createdAt: "desc",
+        },
       }),
   })
 );

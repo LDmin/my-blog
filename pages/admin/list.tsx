@@ -39,10 +39,8 @@ function ArticleList({
   // const { query } = useRouter();
   // const skip = Number(query.skip || "0");
   // const take = Number(query.take || "10");
-  console.log(data);
-  const columns: TableProps<{
-    title: string;
-  }>["columns"] = [
+
+  const columns: TableProps<ArticleProps>["columns"] = [
     {
       title: "标题",
       dataIndex: "title",
@@ -57,9 +55,11 @@ function ArticleList({
       key: "handle",
       render: (_, record) => (
         <Space>
-          <Button type="primary" size="small">
-            编辑
-          </Button>
+          <Link href={`/admin/edit/${record.id}`}>
+            <Button type="primary" size="small">
+              编辑
+            </Button>
+          </Link>
           <Button type="primary" size="small" danger>
             删除
           </Button>

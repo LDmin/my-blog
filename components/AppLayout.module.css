@@ -13,6 +13,8 @@
 }
 
 .content {
+	height: 100%;
+	overflow: auto;
 	padding: 2rem;
 	background-color: #ffffff;
 }
