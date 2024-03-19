@@ -1,21 +1,24 @@
 import { useCallback } from "react";
-import Breadcrumb from "antd/lib/breadcrumb";
 import Layout from "antd/lib/layout";
 import Menu from "antd/lib/menu";
 import theme from "antd/lib/theme";
-import MenuProps from "antd/lib/menu";
+import { withRouter } from "next/router";
+import { WithRouterProps } from "next/dist/client/with-router";
 
 import styles from "./AppLayout.module.css";
 
 const { Header, Content, Footer } = Layout;
 
-const AppLayout: React.FC<IPropsChildren> = ({ children }) => {
+const AppLayout: React.FC<WithRouterProps & IPropsChildren> = ({
+  children,
+  router,
+}) => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const onChangeTab = useCallback(({ key }) => {
-    console.log(key);
+  const onChangeTab = useCallback(({ key }: { key: string }) => {
+    router.push(key);
   }, []);
 
   return (
@@ -24,12 +27,12 @@ const AppLayout: React.FC<IPropsChildren> = ({ children }) => {
         <Header className={`${styles.header}`}>
           <Menu
             mode="horizontal"
-            defaultSelectedKeys={["/"]}
+            defaultSelectedKeys={[router.pathname]}
             onClick={onChangeTab}
             items={[
               {
                 label: "前台页面",
-                key: "/",
+                key: "/front",
               },
               {
                 label: "后台管理",
@@ -38,21 +41,10 @@ const AppLayout: React.FC<IPropsChildren> = ({ children }) => {
             ]}
           />
         </Header>
-        <Content className={`${styles.content}`}>
-          <div
-            style={{
-              background: colorBgContainer,
-              minHeight: 280,
-              padding: 24,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            {children}
-          </div>
-        </Content>
+        <Content className={`${styles.content}`}>{children}</Content>
       </Layout>
     </>
   );
 };
 
-export default AppLayout;
+export default withRouter(AppLayout);
