@@ -1,14 +1,12 @@
 import Head from "next/head";
 import styles from "@/styles/admin/List.module.css";
-import Table, { TableProps } from "antd/lib/table";
+import { Table, Button, Space, TableProps } from "antd";
 import { ArticleProps } from "@/components/Article";
 import client from "@/lib/apollo-client";
 import { gql } from "graphql-tag";
 import { GetServerSideProps } from "next";
-import Button from "antd/lib/button";
 import Link from "next/link";
 import dayjs from "dayjs";
-import Space from "antd/lib/space";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { data } = await client.query({

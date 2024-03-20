@@ -1,7 +1,5 @@
 import { useCallback } from "react";
-import Layout from "antd/lib/layout";
-import Menu from "antd/lib/menu";
-import theme from "antd/lib/theme";
+import { Layout, Menu, theme } from "antd";
 import { withRouter } from "next/router";
 import { WithRouterProps } from "next/dist/client/with-router";
 

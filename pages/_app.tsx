@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import ConfigProvider from "antd/lib/config-provider";
+import { ConfigProvider } from "antd";
 import AppLayout from "@/components/AppLayout";
 import { ApolloProvider } from "@apollo/client";
 import client from "../lib/apollo-client";

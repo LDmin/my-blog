@@ -6,7 +6,7 @@ import { gql } from "graphql-tag";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import dayjs from "dayjs";
-import List from "antd/lib/list";
+import { List } from "antd";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { data } = await client.query({

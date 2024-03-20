@@ -1,12 +1,11 @@
 import { ArticleProps } from "@/components/Article";
 import client from "@/lib/apollo-client";
-import Typography from "antd/lib/Typography";
+import { Typography, Divider } from "antd";
 import gql from "graphql-tag";
 import { GetServerSideProps } from "next";
 import ReactMarkdown from "react-markdown";
 import styles from "@/styles/front/Detail.module.css";
 import dayjs from "dayjs";
-import Divider from "antd/lib/divider";
 import ArrowLeftOutlined from "@ant-design/icons/ArrowLeftOutlined";
 import Link from "next/link";
 import Head from "next/head";

@@ -1,12 +1,6 @@
 import { ArticleProps } from "@/components/Article";
-import Form, { FormProps } from "antd/lib/form/Form";
-import FormItem from "antd/lib/form/FormItem";
-import Input from "antd/lib/input/Input";
-import TextArea from "antd/lib/input/TextArea";
+import {Form, FormProps, Input, Button, Space, DatePicker } from "antd";
 import styles from "@/styles/admin/Edit.module.css";
-import Button from "antd/lib/button";
-import Space from "antd/lib/space";
-import DatePicker from "antd/lib/date-picker";
 import dayjs, { Dayjs } from "dayjs";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -16,6 +10,9 @@ import { useRef } from "react";
 import { GetServerSideProps } from "next";
 import client from "@/lib/apollo-client";
 import dynamic from "next/dynamic";
+
+const FormItem = Form.Item
+const TextArea = Input.TextArea
 
 const Editor = dynamic(() => import("for-editor") as any, {
   ssr: false,
