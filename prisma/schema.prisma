@@ -17,7 +17,6 @@ generator pothos {
 datasource db {
   provider = "postgresql"
   url      = "postgres://default:yITQoq1lXfJ7@ep-sweet-tooth-a4n8ew0y.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require" // uses connection pooling
-  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model Article {
