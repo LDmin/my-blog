@@ -6,7 +6,7 @@ import { GetServerSideProps } from "next";
 import ReactMarkdown from "react-markdown";
 import styles from "@/styles/front/Detail.module.css";
 import dayjs from "dayjs";
-import ArrowLeftOutlined from "@ant-design/icons/ArrowLeftOutlined";
+// import { ArrowLeftOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import Head from "next/head";
 
@@ -46,9 +46,7 @@ function ArticleDetail({ data }: { data: { article: ArticleProps } }) {
       </Head>
       <div className={`${styles.wrapper}`}>
         <div className={`${styles.back}`}>
-          <Link href="/front/list">
-            <ArrowLeftOutlined /> 返回列表
-          </Link>
+          <Link href="/front/list">返回列表</Link>
         </div>
         <div className={`${styles.title}`}>
           <Typography.Title level={2}>{data.article.title}</Typography.Title>
