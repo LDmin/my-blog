@@ -46,6 +46,23 @@ builder.queryField("article", (t) =>
   })
 );
 
+builder.mutationField("deleteArticle", (t) =>
+  t.prismaField({
+    type: "Article",
+    args: {
+      id: t.arg.id({ required: true }),
+    },
+    nullable: true,
+    resolve: async (query, _parent, args) =>
+      prisma.article.delete({
+        ...query,
+        where: {
+          id: Number(args.id),
+        },
+      }),
+  })
+);
+
 builder.queryField("articles", (t) =>
   t.prismaField({
     type: ["Article"],
@@ -84,6 +101,30 @@ builder.mutationField("createArticle", (t) =>
           title: args.title,
           content: args.content,
           createdAt: args.createdAt,
+        },
+      }),
+  })
+);
+
+builder.mutationField("updateArticle", (t) =>
+  t.prismaField({
+    type: "Article",
+    args: {
+      id: t.arg.id({ required: true }),
+      title: t.arg.string({ required: true }),
+      content: t.arg.string({ required: true }),
+      createdAt: t.arg.string({ required: true }),
+    },
+    resolve: async (query, _parent, args, _info) =>
+      prisma.article.update({
+        ...query,
+        data: {
+          title: args.title,
+          content: args.content,
+          createdAt: args.createdAt,
+        },
+        where: {
+          id: Number(args.id),
         },
       }),
   })

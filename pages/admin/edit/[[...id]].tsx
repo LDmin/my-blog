@@ -1,5 +1,13 @@
 import { ArticleProps } from "@/components/Article";
-import {Form, FormProps, Input, Button, Space, DatePicker } from "antd";
+import {
+  Form,
+  FormProps,
+  Input,
+  Button,
+  Space,
+  DatePicker,
+  message,
+} from "antd";
 import styles from "@/styles/admin/Edit.module.css";
 import dayjs, { Dayjs } from "dayjs";
 import { gql, useMutation } from "@apollo/client";
@@ -11,15 +19,15 @@ import { GetServerSideProps } from "next";
 import client from "@/lib/apollo-client";
 import dynamic from "next/dynamic";
 
-const FormItem = Form.Item
-const TextArea = Input.TextArea
+const FormItem = Form.Item;
+const TextArea = Input.TextArea;
 
 const Editor = dynamic(() => import("for-editor") as any, {
   ssr: false,
 });
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  let id = context.params?.id as string;
+  let id = (context.params?.id as string[])?.[0];
 
   if (!id) {
     return {
@@ -51,7 +59,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const CreateArticleMutation = gql`
-  mutation CreateDraftMutation(
+  mutation CreateArticleMutation(
     $title: String!
     $content: String!
     $createdAt: String!
@@ -65,22 +73,60 @@ const CreateArticleMutation = gql`
   }
 `;
 
+const UpdateArticleMutation = gql`
+  mutation UpdateArticleMutation(
+    $id: ID!
+    $title: String!
+    $content: String!
+    $createdAt: String!
+  ) {
+    updateArticle(
+      id: $id
+      title: $title
+      content: $content
+      createdAt: $createdAt
+    ) {
+      id
+      title
+      content
+      createdAt
+    }
+  }
+`;
+
 function CreateArticle({ data }: { data: { article: ArticleProps } }) {
   const editor = useRef(null);
   const [createArticle] = useMutation(CreateArticleMutation);
+  const [updateArticle] = useMutation(UpdateArticleMutation);
   const router = useRouter();
 
   const onFinish: FormProps<ArticleProps>["onFinish"] = async (values) => {
-    await createArticle({
-      variables: {
-        title: values.title,
-        content: values.content,
-        createdAt: (values.createdAt as unknown as Dayjs).valueOf().toString(),
-      },
-    });
+    if (data?.article?.id) {
+      await updateArticle({
+        variables: {
+          id: data.article?.id,
+          title: values.title,
+          content: values.content,
+          createdAt: (values.createdAt as unknown as Dayjs)
+            .valueOf()
+            .toString(),
+        },
+      });
+    } else {
+      await createArticle({
+        variables: {
+          title: values.title,
+          content: values.content,
+          createdAt: (values.createdAt as unknown as Dayjs)
+            .valueOf()
+            .toString(),
+        },
+      });
+    }
+    message.success(`文章已${data?.article?.id ? "修改" : "添加"}`);
     router.push("/admin/list");
   };
-  console.log(data);
+
   return (
     <div className="layout-content">
       <Form
@@ -89,9 +135,9 @@ function CreateArticle({ data }: { data: { article: ArticleProps } }) {
         wrapperCol={{ span: 20 }}
         className={`${styles.form}`}
         initialValues={{
-          title: data?.article.title || "",
-          content: data?.article.content || "",
-          createdAt: data?.article.createdAt
+          title: data?.article?.title || "",
+          content: data?.article?.content || "",
+          createdAt: data?.article?.createdAt
             ? dayjs(Number(data.article.createdAt))
             : dayjs(),
         }}

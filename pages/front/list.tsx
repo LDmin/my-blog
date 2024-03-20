@@ -19,6 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
       }
     `,
+    fetchPolicy: "no-cache",
   });
 
   return {

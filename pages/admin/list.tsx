@@ -1,12 +1,14 @@
 import Head from "next/head";
 import styles from "@/styles/admin/List.module.css";
-import { Table, Button, Space, TableProps } from "antd";
+import { Table, Button, Space, TableProps, Popconfirm, message } from "antd";
 import { ArticleProps } from "@/components/Article";
 import client from "@/lib/apollo-client";
-import { gql } from "graphql-tag";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import dayjs from "dayjs";
+import { gql, useMutation } from "@apollo/client";
+import { useCallback } from "react";
+import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { data } = await client.query({
@@ -20,6 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         count
       }
     `,
+    fetchPolicy: "no-cache",
   });
 
   return {
@@ -29,14 +32,42 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
+const DeleteArticleMutation = gql`
+  mutation DeleteArticleMutation($id: ID!) {
+    deleteArticle(id: $id) {
+      id
+      title
+      content
+      createdAt
+    }
+  }
+`;
+
 function ArticleList({
   data,
 }: {
   data: { articles: ArticleProps[]; count: number };
 }) {
-  // const { query } = useRouter();
-  // const skip = Number(query.skip || "0");
-  // const take = Number(query.take || "10");
+  const router = useRouter();
+  const skip = Number(router.query.skip || "0");
+  const take = Number(router.query.take || "10");
+
+  const [deleteArticle] = useMutation(DeleteArticleMutation);
+
+  const deleteArticleHandle = useCallback(async (id: number) => {
+    await deleteArticle({
+      variables: {
+        id,
+      },
+    });
+    message.success("文章已删除！");
+    router.reload();
+  }, []);
+
+  const onPageChange = useCallback((page: number, pageSize: number) => {
+    console.log(router, page, pageSize);
+    router.push(`${router.pathname}?skip=${page - 1}&take=${pageSize}`);
+  }, []);
 
   const columns: TableProps<ArticleProps>["columns"] = [
     {
@@ -58,9 +89,17 @@ function ArticleList({
               编辑
             </Button>
           </Link>
-          <Button type="primary" size="small" danger>
-            删除
-          </Button>
+          <Popconfirm
+            title="删除文章"
+            description="您确定要删除此文章?"
+            onConfirm={() => deleteArticleHandle(record.id!)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary" size="small" danger>
+              删除
+            </Button>
+          </Popconfirm>
         </Space>
       ),
     },
@@ -85,7 +124,9 @@ function ArticleList({
           columns={columns}
           pagination={{
             total: data.count,
-            pageSize: 5,
+            current: skip + 1,
+            pageSize: take,
+            onChange: onPageChange,
           }}
         />
       </div>
