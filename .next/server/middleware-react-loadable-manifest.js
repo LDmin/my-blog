@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST='{"admin/edit/[[...id]].tsx -> for-editor":{"id":81619,"files":["static/chunks/619.5ee0d1762236463d.js"]}}';
