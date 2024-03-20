@@ -1,4 +1,3 @@
-import { ArticleProps } from "@/components/Article";
 import {
   Form,
   FormProps,

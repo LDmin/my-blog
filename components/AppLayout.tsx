@@ -3,7 +3,7 @@ import { Layout, Menu, theme } from "antd";
 import { withRouter } from "next/router";
 import { WithRouterProps } from "next/dist/client/with-router";
 
-import styles from "./AppLayout.module.css";
+import styles from "@/styles/components/AppLayout.module.css";
 
 const { Header, Content, Footer } = Layout;
 

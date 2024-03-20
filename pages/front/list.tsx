@@ -1,6 +1,5 @@
 import Head from "next/head";
 import styles from "@/styles/front/List.module.css";
-import { ArticleProps } from "@/components/Article";
 import client from "@/lib/apollo-client";
 import { gql } from "graphql-tag";
 import { GetServerSideProps } from "next";

@@ -1,7 +1,6 @@
 import Head from "next/head";
 import styles from "@/styles/admin/List.module.css";
 import { Table, Button, Space, TableProps, Popconfirm, message } from "antd";
-import { ArticleProps } from "@/components/Article";
 import client from "@/lib/apollo-client";
 import { GetServerSideProps } from "next";
 import Link from "next/link";

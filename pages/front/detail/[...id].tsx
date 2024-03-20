@@ -1,4 +1,3 @@
-import { ArticleProps } from "@/components/Article";
 import client from "@/lib/apollo-client";
 import { Typography, Divider } from "antd";
 import gql from "graphql-tag";
