@@ -1,1 +1,0 @@
-{"/_app":"pages/_app.js","/_error":"pages/_error.js","/_document":"pages/_document.js","/front/detail/[...id]":"pages/front/detail/[...id].js","/api/graphql":"pages/api/graphql.js","/admin/list":"pages/admin/list.js","/admin/edit/[[...id]]":"pages/admin/edit/[[...id]].js","/front/list":"pages/front/list.js","/404":"pages/404.html"}
